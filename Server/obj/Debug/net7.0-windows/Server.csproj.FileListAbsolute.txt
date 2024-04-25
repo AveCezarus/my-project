@@ -1,0 +1,16 @@
+D:\Академия Шаг\home\сис\Курсач\Server\bin\Debug\net7.0-windows\Server.exe
+D:\Академия Шаг\home\сис\Курсач\Server\bin\Debug\net7.0-windows\Server.deps.json
+D:\Академия Шаг\home\сис\Курсач\Server\bin\Debug\net7.0-windows\Server.runtimeconfig.json
+D:\Академия Шаг\home\сис\Курсач\Server\bin\Debug\net7.0-windows\Server.dll
+D:\Академия Шаг\home\сис\Курсач\Server\bin\Debug\net7.0-windows\Server.pdb
+D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\Server.Form1.resources
+D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\Server.csproj.GenerateResource.cache
+D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\Server.GeneratedMSBuildEditorConfig.editorconfig
+D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\Server.AssemblyInfoInputs.cache
+D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\Server.AssemblyInfo.cs
+D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\Server.csproj.CoreCompileInputs.cache
+D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\Server.dll
+D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\refint\Server.dll
+D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\Server.pdb
+D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\Server.genruntimeconfig.cache
+D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\ref\Server.dll
