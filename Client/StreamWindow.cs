@@ -15,6 +15,7 @@ namespace Client
 {
     public partial class StreamWindow : Form
     {
+        private string server;
         private TcpClient client;
         private NetworkStream stream;
         private readonly int updateInterval = 500;
@@ -24,12 +25,17 @@ namespace Client
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             UpdateImagePeriodically();
         }
-     
+        public StreamWindow(string server)
+        {
+            InitializeComponent();
+            this.server = server;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            UpdateImagePeriodically();
+        }
+
         private void StreamWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
-            stream?.Close();
-            client?.Close();
-            Form1 form1 = new Form1();
+            Form1 form1 = new Form1(server);
             form1.Show();
         }
         private async void UpdateImagePeriodically()
@@ -37,19 +43,19 @@ namespace Client
             while (true)
             {
                 await UpdateImage();
-                Thread.Sleep(updateInterval); 
+                Thread.Sleep(updateInterval);
             }
         }
         private async Task UpdateImage()
         {
             try
             {
-               
+
                 stream?.Close();
                 client?.Close();
 
                 int port = 5557;
-                client = new TcpClient("127.0.0.1", port);
+                client = new TcpClient(server, port);
                 stream = client.GetStream();
 
                 byte[] requestBytes = Encoding.UTF8.GetBytes("GetStream");
@@ -77,6 +83,12 @@ namespace Client
             {
                 Console.WriteLine("An error occurred: " + ex.Message);
             }
+        }
+
+        private void StreamWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            stream?.Close();
+            client?.Close();
         }
     }
 }

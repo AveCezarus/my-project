@@ -48,6 +48,7 @@
             Controls.Add(pictureBox1);
             Name = "StreamWindow";
             Text = "Stream";
+            FormClosing += StreamWindow_FormClosing;
             FormClosed += StreamWindow_FormClosed;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);

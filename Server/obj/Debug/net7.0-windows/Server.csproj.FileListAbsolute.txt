@@ -14,3 +14,4 @@ D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-wind
 D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\Server.pdb
 D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\Server.genruntimeconfig.cache
 D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\ref\Server.dll
+D:\Академия Шаг\home\сис\Курсач\Server\obj\Debug\net7.0-windows\Server.sourcelink.json

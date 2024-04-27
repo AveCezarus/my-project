@@ -7,119 +7,132 @@ namespace Client
     public partial class Form1 : Form
     {
         private StreamWindow streamWindow;
+        private string server;
+        private bool a = false;
+        public Form1(string server)
+        {
+            InitializeComponent();
+            this.server = server;
+            textBox1.ReadOnly = true;
+        }
         public Form1()
         {
-            
             InitializeComponent();
             textBox1.ReadOnly = true;
-            InitializeTimer();
         }
-        private void InitializeTimer()
-        {
-            timer1 = new System.Windows.Forms.Timer();
-            timer1.Interval = 2000;
-            timer1.Tick += timer1_Tick;
-            timer1.Start();
-        }
-        private void GetPrograms()
+
+        private async void GetPrograms()
         {
             try
             {
                 int port = 5555;
-                TcpClient client = new TcpClient("127.0.0.1", port);
-                NetworkStream stream = client.GetStream();
-                string message = "GetRunningPrograms";
-                byte[] data = Encoding.UTF8.GetBytes(message);
-                stream.Write(data, 0, data.Length);
-                data = new byte[1024];
-                StringBuilder response = new StringBuilder();
-                int bytes = 0;
+                using (TcpClient client = new TcpClient(server, port))
+                using (NetworkStream stream = client.GetStream())
+                {
+                    string message = "GetRunningPrograms";
+                    byte[] data = Encoding.UTF8.GetBytes(message);
+                    await stream.WriteAsync(data, 0, data.Length);
 
-                do
-                {
-                    bytes = stream.Read(data, 0, data.Length);
-                    response.Append(Encoding.UTF8.GetString(data, 0, bytes));
+                    StringBuilder response = new StringBuilder();
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+
+                    while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                    {
+                        response.Append(Encoding.UTF8.GetString(buffer, 0, bytesRead));
+                    }
+
+                    listBox1.Items.Clear();
+                    string[] programs = response.ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string program in programs)
+                    {
+                        listBox1.Items.Add(program);
+                    }
                 }
-                while (stream.DataAvailable);
-                listBox1.Items.Clear();
-                string[] programs = response.ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (string program in programs)
-                {
-                    listBox1.Items.Add(program);
-                }
-                stream.Close();
-                client.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
+                a = false;
             }
         }
-        private void GetProgram()
+
+        private async void GetProgram()
         {
             try
             {
                 int port = 5556;
-                TcpClient client = new TcpClient("127.0.0.1", port);
-                NetworkStream stream = client.GetStream();
-                string message = "GetActiveWindow";
-                byte[] data = Encoding.UTF8.GetBytes(message);
-                stream.Write(data, 0, data.Length);
-                data = new byte[1024];
-                StringBuilder response = new StringBuilder();
-                int bytes = 0;
-
-                do
+                using (TcpClient client = new TcpClient(server, port))
+                using (NetworkStream stream = client.GetStream())
                 {
-                    bytes = stream.Read(data, 0, data.Length);
-                    response.Append(Encoding.UTF8.GetString(data, 0, bytes));
+                    string message = "GetActiveWindow";
+                    byte[] data = Encoding.UTF8.GetBytes(message);
+                    await stream.WriteAsync(data, 0, data.Length);
+
+                    StringBuilder response = new StringBuilder();
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+
+                    while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                    {
+                        response.Append(Encoding.UTF8.GetString(buffer, 0, bytesRead));
+                    }
+
+                    textBox1.Clear();
+                    textBox1.Text = response.ToString();
                 }
-                while (stream.DataAvailable);
-                textBox1.Clear();
-                textBox1.Text = response.ToString();
-                stream.Close();
-                client.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
+                a = false;
             }
         }
-        private void button3_Click(object sender, EventArgs e)
-        {
-            streamWindow = new StreamWindow();
-            streamWindow.Show();
-            this.Hide();
 
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            server = textBox2.Text;
+            a = true;
+            while (a)
+            {
+                await Task.Delay(2000);
+                GetPrograms();
+                GetProgram();
+            }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e)
         {
-            GetPrograms();
-            GetProgram();
+            streamWindow = new StreamWindow(server);
+            streamWindow.Show();
+            this.Hide();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+           
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
             try
             {
-                timer1.Stop();
                 if (streamWindow != null && !streamWindow.IsDisposed)
                 {
                     streamWindow.Close();
                     streamWindow.Dispose();
                 }
+                this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error during application shutdown: " + ex.Message);
+                
             }
         }
     }
 }
 
-
+//127.0.0.1
 //Програма для стеження за активністю користувача
 // -сервер встановлюється на компьютер користувача
 // - клиєнт - можна підключитися та подивитися які програми запущені, яке активне вікно, отримати зображення з екрану
- 

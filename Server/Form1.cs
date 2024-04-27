@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 
 namespace Server
 {
+   
     public partial class Form1 : Form
     {
         TcpListener server;
@@ -21,9 +22,15 @@ namespace Server
         public Form1()
         {
             InitializeComponent();
-            StartServer();
+            this.Shown += Form1_Load;
         }
-
+        private void StartServerInBackground()
+        {
+            ThreadStart threadStart = new ThreadStart(StartServer);
+            Thread serverThread = new Thread(threadStart);
+            serverThread.IsBackground = true;
+            serverThread.Start();
+        }
         private void StartServer()
         {
             try
@@ -41,11 +48,9 @@ namespace Server
                     listenThread.Start();
                     Console.WriteLine($"Server started on port {port}");
                 }
-                MessageBox.Show("Server started.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
             }
         }
 
@@ -62,7 +67,6 @@ namespace Server
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex.Message);
             }
         }
 
@@ -125,7 +129,7 @@ namespace Server
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred: " + ex.Message);
+
             }
             finally
             {
@@ -138,7 +142,7 @@ namespace Server
         {
             try
             {
-                
+
                 foreach (TcpListener listener in listeners)
                 {
                     listener.Stop();
@@ -148,12 +152,17 @@ namespace Server
                 {
                     listenThread.Join();
                 }
-                MessageBox.Show("Server stopped.");
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            StartServerInBackground();
+            this.Hide();
         }
     }
 }
